@@ -64,8 +64,8 @@ void loop() {
   // Calculate battery percentage
   percentageBattery = returnPercentage(ampereHours, percentageBattery);
 
+  writeFieldThingSpeakChannel(percentageBattery, batteryVoltage, batteryCurrent, batteryPower);
+
   // Update previous time
   previousMillis = currentMillis;
-
-  writeFieldThingSpeakChannel(percentageBattery, batteryVoltage, batteryCurrent, batteryPower);
 }
