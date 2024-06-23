@@ -23,12 +23,12 @@ WiFiClient client;
 float returnInitialPercentage(float batteryVoltage){
   if(batteryVoltage <= 10.5){
     return 0.0;
-  }else if(batteryVoltage >= 12.6){
+  }else if(batteryVoltage >= 12.66){
     return 100.0;
-  }else if(batteryVoltage >= 11.62 & batteryVoltage < 12.6){
-    return ( ( batteryVoltage - 11.51) / (1.09) ) * 100; // (12.6-11.51) = 1.09
+  }else if(batteryVoltage >= 11.58 & batteryVoltage < 12.66){
+    return ( ( batteryVoltage - 11.31) / (1.35) ) * 100; // (12.66-11.31) = 1.35
   }else{
-    return ( ( batteryVoltage - 10.5) / (1.01) ) * 10; // (11.51-10.5) = 1.01
+    return ( ( batteryVoltage - 10.5) / (1.08) ) * 20; // (11.58-10.5) = 1.08
   }
 }
 
