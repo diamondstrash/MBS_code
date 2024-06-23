@@ -1,12 +1,12 @@
 #include "MSB_intern_library.h"
 
-const char* ssid = "[YOUR SSID]"; // WiFi Network's SSID
-const char* password = "[YOUR PASSWORD]";  //WiFi Network's Password
-const char* username = "[YOUR USERNAME]";  //WiFi Network's Username
+const char* ssid = "eduroam"; // WiFi Network's SSID
+const char* password = "heimaeM4ja";  //WiFi Network's Password
+const char* username = "fortina";  //WiFi Network's Username
 const char* server = "api.thingspeak.com"; //API website
-const char* APIKey = "[YOUR USER API KEY]"; //User API Key
-const char* writeAPIKey = "[YOUR WRITE CHANNEL API KEY]"; //Write API Key (used to update field in ThingSpeak)
-const char* channelID = "[YOUR CHANNEL ID]"; //channel ID
+const char* APIKey = "2TP37RKYAJT1A1ID"; //User API Key
+const char* writeAPIKey = "Z6OJTDDYVTCEU4XV"; //Write API Key (used to update field in ThingSpeak)
+const char* channelID = "2558267"; //channel ID
 const float ratio_Voltage = 0.9658; //ratio to apply in order to have more accurate values for the voltage
 const float ratio_Current = 0.9790; //ratio to apply in order to have more accurate values for the current
 const float R1 = 820000.0; //value of resistor R1 for the voltage divider bridge
@@ -39,7 +39,7 @@ float returnInitialPercentage(float batteryVoltage){
     - if the percentage is below 0%, the percentage is automatically adjust to 0%.
 */
 float returnPercentage(float ampereHours, float percentageBattery){
-  float percentage = ( ( ( (percentageBattery / 100.0) * totalCapacity ) + ampereHours) / totalCapacity ) * 100;
+  float percentage = percentageBattery  + ( ampereHours / totalCapacity ) * 100;
   if(percentage <= 0.0){
     return 0.0;
   }else if(percentage >= 100.0){

@@ -1,7 +1,6 @@
 #include "MSB_intern_library.h"
 
 float percentageBattery = 0.0; //Variable to store percentage of battery
-float ampereHours = 0.0; // Variable to store the accumulated ampere-hours
 unsigned long previousMillis = 0; // Variable to store the previous time
 
 void setup() {
@@ -27,43 +26,41 @@ void setup() {
   clearThingSpeakChannel(); //clear ThingSpeak Channel
   
   /*
-    Get initial battery capacity
+    Get initial battery percentage
   */
   delay(5000);
   float sampleValue_Volt = getMeanVoltage(500); //Get mean voltage value
   float voltage_sensed_A1 = sampleValue_Volt * 5 / 1023.0; //Convert the Analog Value to a Continu Values
-  float batteryVoltage = voltage_sensed_A1 * ((R1+R2)/R2); //Calculate the true voltage value
+  float batteryVoltage = voltage_sensed_A1 * ((R1+R2)/R2); //Calculate the "true" voltage value
   percentageBattery = returnInitialPercentage(batteryVoltage); //Calculate initial percentage of the battery
 }
 
-void loop() {
-  //variables declaration
-  float batteryCurrent = 0.0;
-  float batteryPower = 0.0;
+void loop() { 
   
   //Calculate Voltage Value
-  float sampleValue_Volt = getMeanVoltage(1500);
+  float sampleValue_Volt = getMeanVoltage(1500); //Get mean voltage value
   float voltage_sensed_A1 = sampleValue_Volt * 5 / 1023.0; //Convert the Analog Value to a Continu Values
-  float batteryVoltage = voltage_sensed_A1 * ((R1+R2)/R2);
+  float batteryVoltage = voltage_sensed_A1 * ((R1+R2)/R2) ; //Calculate the "true" current value
 
   //Calculate Current Value
-  float sampleValue = getMeanCurrent(); //Get mean current value
-  float current_sensed_A0 = sampleValue * 5 / 1023.0; //Convert the Analog Value to a Continu Values
-  batteryCurrent = ( ( current_sensed_A0 -  2.5 ) ) / 0.185; //Calculate the true current value
+  float sampleValue_Current = getMeanCurrent(); //Get mean current value
+  float current_sensed_A0 = sampleValue_Current * 5 / 1023.0; //Convert the Analog Value to a Continu Values
+  float batteryCurrent = ( ( current_sensed_A0 -  2.5 ) ) / 0.185; //Calculate the "true" current value
 
   // Calculate watt
-  batteryPower = batteryCurrent * batteryVoltage;
+  float batteryPower = batteryCurrent * batteryVoltage; //calculate instant power
 
   // Calculate ampere-hours
   unsigned long currentMillis = millis(); // Get the current time
   unsigned long elapsedTime = currentMillis - previousMillis; // Calculate elapsed time in milliseconds
 
   // Convert elapsed time to hours and update ampere-hours
-  ampereHours += (batteryCurrent * elapsedTime) / (1000.0 * 3600.0); // Convert milliseconds to hours
+  float ampereHours = (batteryCurrent * elapsedTime) / (1000.0 * 3600.0); // Convert milliseconds to hours
 
   // Calculate battery percentage
   percentageBattery = returnPercentage(ampereHours, percentageBattery);
 
+  //Send HTTP POST Request:
   writeFieldThingSpeakChannel(percentageBattery, batteryVoltage, batteryCurrent, batteryPower);
 
   // Update previous time
