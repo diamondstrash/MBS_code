@@ -7,8 +7,12 @@ const char* server = "api.thingspeak.com"; //API website
 const char* APIKey = "2TP37RKYAJT1A1ID"; //User API Key
 const char* writeAPIKey = "Z6OJTDDYVTCEU4XV"; //Write API Key (used to update field in ThingSpeak)
 const char* channelID = "2558267"; //channel ID
-const float ratio_Voltage = 0.9658; //ratio to apply in order to have more accurate values for the voltage
-const float ratio_Current = 0.9790; //ratio to apply in order to have more accurate values for the current
+
+
+const float ratio_Voltage = 0.98; //ratio to apply in order to have more accurate values for the voltage
+const float ratio_Current = 0.9398; //ratio to apply in order to have more accurate values for the current
+
+
 const float R1 = 820000.0; //value of resistor R1 for the voltage divider bridge
 const float R2 = 430000.0; //value of resistor R2 for the voltage divider bridge
 const float totalCapacity = 80.0; //The total capacity of the battery is 80 Ah (Ampere Hour)
@@ -63,8 +67,11 @@ float getMeanCurrent(){
     delay(10);
   }
   sampleValue = sampleValue/4500.0;
+  sampleValue = sampleValue * 5 / 1023.0;
   return sampleValue;
 }
+
+
 
 /*
   Return mean current:
@@ -80,6 +87,7 @@ float getMeanVoltage(int nbr_itr){
     delay(10);
   }
   sampleValue = sampleValue/nbr_itr;
+  sampleValue = sampleValue * 5 / 1023.0;
   return sampleValue;
 }
 

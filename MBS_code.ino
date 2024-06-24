@@ -30,22 +30,19 @@ void setup() {
   */
   delay(5000);
   float sampleValue_Volt = getMeanVoltage(500); //Get mean voltage value
-  float voltage_sensed_A1 = sampleValue_Volt * 5 / 1023.0; //Convert the Analog Value to a Continu Values
-  float batteryVoltage = voltage_sensed_A1 * ((R1+R2)/R2); //Calculate the "true" voltage value
+  float batteryVoltage = sampleValue_Volt * ((R1+R2)/R2) * ratio_Voltage; //Calculate the "true" voltage value
   percentageBattery = returnInitialPercentage(batteryVoltage); //Calculate initial percentage of the battery
 }
 
-void loop() { 
+void loop() {
   
   //Calculate Voltage Value
   float sampleValue_Volt = getMeanVoltage(1500); //Get mean voltage value
-  float voltage_sensed_A1 = sampleValue_Volt * 5 / 1023.0; //Convert the Analog Value to a Continu Values
-  float batteryVoltage = voltage_sensed_A1 * ((R1+R2)/R2) ; //Calculate the "true" current value
+  float batteryVoltage = sampleValue_Volt * ((R1+R2)/R2) * ratio_Voltage; //Calculate the "true" current value
 
   //Calculate Current Value
   float sampleValue_Current = getMeanCurrent(); //Get mean current value
-  float current_sensed_A0 = sampleValue_Current * 5 / 1023.0; //Convert the Analog Value to a Continu Values
-  float batteryCurrent = ( ( current_sensed_A0 -  2.5 ) ) / 0.185; //Calculate the "true" current value
+  float batteryCurrent = ( ( sampleValue_Current -  2.5 ) * ratio_Current ) / 0.185; //Calculate the "true" current value
 
   // Calculate watt
   float batteryPower = batteryCurrent * batteryVoltage; //calculate instant power
